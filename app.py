@@ -85,7 +85,7 @@ import requests
 def load_classification_model():
     try:
         # Check if the model exists, if not, download it
-        url = "https://github.com/fernchunyar/Final_Proj/releases/tag/v1.0/USonlyResnet50NoEarlyHaveTest.pth"
+        url = "https://github.com/fernchunyar/Final_Proj/releases/download/v1.0/USonlyResnet50NoEarlyHaveTest.pth"
         response = requests.get(url)
         with open('USonlyResnet50NoEarlyHaveTest.pth', 'wb') as f:
             f.write(response.content)
