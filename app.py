@@ -84,14 +84,25 @@ import requests
 
 def load_classification_model():
     try:
-        # Check if the model exists, if not, download it
+        # Create the model architecture first (e.g., using ResNet50 or VGG16)
+        classification_model = Vgg16()  # Make sure Vgg16 or ResNet50 is correctly defined in your code
+
+        # Download model weights from the URL
         url = "https://github.com/fernchunyar/Final_Proj/releases/download/v1.0/USonlyResnet50NoEarlyHaveTest.pth"
         response = requests.get(url)
+        
+        # Save the model weights to the local file
         with open('USonlyResnet50NoEarlyHaveTest.pth', 'wb') as f:
             f.write(response.content)
-        classification_model = torch.load('USonlyResnet50NoEarlyHaveTest.pth', map_location=device)
+
+        # Load the saved weights into the model
+        classification_model.load_state_dict(torch.load('USonlyResnet50NoEarlyHaveTest.pth', map_location=device))
+
+        # Set the model to evaluation mode
+        classification_model.eval()
 
         return classification_model
+
     except Exception as e:
         st.error(f"Failed to load classification model: {e}")
         return None
