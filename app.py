@@ -5,8 +5,8 @@ import torch.nn as nn
 from torchvision import models, transforms
 import base64
 from streamlit_option_menu import option_menu
-import os
-import gdown
+import torch
+import torch.nn as nn
 import numpy as np
 import pandas as pd
 import torchvision
@@ -14,56 +14,67 @@ from torchvision import datasets, models, transforms
 import matplotlib.pyplot as plt
 import time
 import copy
-from torch.utils.data import Dataset
+import os
+import matplotlib.pyplot as plt
+#from tensorflow.keras.preprocessing import image
+from PIL import Image  # Import PIL to resize images
+import shutil
+
+import torchvision.transforms as transforms
+from torchvision.datasets import ImageFolder
+from torch.utils.data import DataLoader, random_split
+import random
+from sklearn.model_selection import train_test_split
+
 import torch.optim as optim
 from torch.optim import lr_scheduler
 from sklearn.metrics import classification_report, confusion_matrix
 import timm
+#import seaborn as sns
 from torchvision.transforms import RandomHorizontalFlip, RandomRotation, ColorJitter
 
 # Set the page layout to wide mode
 st.set_page_config(layout="wide", page_title="Breast Cancer Classifier")
 
-# Function to download model from Google Drive
-def download_model():
-    file_url = "https://drive.google.com/drive/folders/1TRFACtK4zgEO4NA8e2Wr3P2gBCpsSZW4?usp=sharing"
-    model_path = "USonlyResnet50NoEarlyHaveTest.pth"
-
-    if not os.path.exists(model_path):  # Check if the model already exists
-        try:
-            st.info("Downloading model weights...")
-            gdown.download(file_url, model_path, quiet=False)
-            st.success("Model downloaded successfully!")
-        except Exception as e:
-            st.error(f"Failed to download model: {e}")
-            return None
-    else:
-        st.info("Model file already exists.")
-    return model_path
-
-# Call download_model to ensure the model is downloaded before using it
-download_model()
-
 # Define the VGG classifier
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 class_names = ['benign','malignant']
+minority_classes = ['malignant']
 
+#Transfer Learning by fineTuning the pretrained Resnet101 Model
+#Load Resnet101 pretained Model
+
+#If pretained is not working, you can also use weights instead.
+# def ResNet101():
+#     Resnet101 = models.resnet101(pretrained=True)
+#     Resnet101 = models.resnet101(weights=models.ResNet101_Weights.DEFAULT)  # Update for torchvision >= 0.13
+#     for param in Resnet101.parameters():
+#         param.requires_grad = True
+#     in_features = Resnet101.fc.in_features
+#     Resnet101.fc = nn.Linear(in_features, len(class_names))
+#     return Resnet101  # Ensure the model is returned
 def Vgg16():
     model = timm.create_model('resnet50', pretrained=True)
-    num_ftrs = model.fc.in_features  # Number of input features for the FC layer
-    model.fc = torch.nn.Linear(num_ftrs, 2)  # Change to the number of classes
+
+    # ปรับแต่ง Fully Connected Layer (FC Layer)
+    num_ftrs = model.fc.in_features  # จำนวน input features ของ FC layer
+    model.fc = torch.nn.Linear(num_ftrs, 2)  # เปลี่ยนเป็นจำนวนคลาสที่คุณต้องการ (2 คลาส)
+
+    # ย้ายโมเดลไปที่ device
     model = model.to(device)
     return model
 
+from torch.utils.data import Dataset
+class_labels = ['benign','malignant']
 class CustomImageDataset(Dataset):
-    def __init__(self, dataframe, transform=None):
+    def init(self, dataframe, transform=None):
         self.dataframe = dataframe
         self.transform = transform
 
-    def __len__(self):
+    def len(self):
         return len(self.dataframe)
 
-    def __getitem__(self, idx):
+    def getitem(self, idx):
         image_path = self.dataframe.iloc[idx]['Image_Path']
         label = class_labels.index(self.dataframe.iloc[idx]['Label'])  # Convert label to index
         image = Image.open(image_path)  # .convert("RGB")
@@ -84,6 +95,37 @@ def load_classification_model():
     except Exception as e:
         st.error(f"Failed to load classification model: {e}")
         return None
+
+
+# def classify_image(image, model):
+#     # Convert image to RGB, resize, and apply transforms
+#     #image = image.convert("RGB").resize((224, 224))
+#     minority_class_transforms = transforms.Compose([
+#     RandomHorizontalFlip(p=0.9),  # Apply with 90% probability
+#     RandomRotation(15, expand=False, center=None),
+#     ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2, hue=0.1),
+# ])
+#     transform = transforms.Compose([
+#         transforms.Resize(256),
+#         transforms.CenterCrop(224),
+#         transforms.RandomApply([minority_class_transforms], p=0.5) if any(cls in minority_classes for cls in class_names) else transforms.RandomApply([], p=0.0),
+#         #transforms.ToTensor(),
+#         transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+#     ])
+#     transform = transforms.ToTensor(transform).unsqueeze(0).to(device)
+
+#     with torch.no_grad():
+#         output = model(image)
+#         probs = torch.softmax(output, dim=1) * 100  # Convert to percentages
+
+#         labels = {0: "Benign", 1: "Normal", 2: "Malignant"}
+#         probs_percent = probs.squeeze().cpu().numpy()
+
+#         probabilities = {labels[i]: probs_percent[i] for i in range(len(labels))}
+#         _, predicted_class = torch.max(output, 1)
+
+#         return labels[predicted_class.item()], probabilities
+
 
 def classify_image(image, model):
     try:
@@ -125,6 +167,9 @@ def classify_image(image, model):
         st.error(f"An error occurred while processing the image: {e}")
         return None, None
 
+
+
+
 # Create a guideline page
 def guideline_page():
     st.title("Guidelines for Using the Breast Cancer Classification App")
@@ -163,12 +208,16 @@ def guideline_page():
 
     st.success("You are now ready to proceed to the **Classification** page!")
 
+
 # Create a classification page
 def classification_page():
     # Display logos and header
-    with open("logo_img.png", "rb") as image_file:
+    with open("swulogo.png", "rb") as image_file:
         logo_base64 = base64.b64encode(image_file.read()).decode()
     
+    # Display logos and header
+    with open("logo_img.png", "rb") as image_file:
+        logo_base64 = base64.b64encode(image_file.read()).decode()
     
     st.markdown(
     f"""
@@ -222,6 +271,7 @@ def classification_page():
                             {result}
                         </strong> 
                         </h1>
+                        
                         """,
                         unsafe_allow_html=True,
                     )
@@ -231,12 +281,16 @@ def classification_page():
                     total_prob = sum(probabilities.values())
                     st.write(f"### Total Probability: {total_prob:.2f}%")
 
+                        
+
+
 # Sidebar menu logic with option menu
 with st.sidebar:
     selected = option_menu(
         menu_title="Main Menu",  # required
         options=["Guideline", "Classification"],  # required
         icons=["book", "bar-chart"], #bar-chart , search
+        #icons=[f'<span style="color:blue;">house</span>', f'<span style="color:red;">brain</span>'],# optional #question-circle
         menu_icon="house",  # optional
         default_index=0,  # optional
     )
