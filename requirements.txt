@@ -8,3 +8,4 @@ matplotlib
 Pillow
 scikit-learn
 timm
+gdown
