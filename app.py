@@ -86,7 +86,7 @@ class CustomImageDataset(Dataset):
 
 import requests
     
- def load_classification_model():
+def load_classification_model():
      url = "https://github.com/fernchunyar/Final_Proj/releases/tag/v1.0/USonlyResnet50NoEarlyHaveTest.pth"
      response = requests.get(url)
      with open('USonlyResnet50NoEarlyHaveTest.pth', 'wb') as f:
