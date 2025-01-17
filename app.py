@@ -176,6 +176,9 @@ def classification_page():
     # Display logos and header
     with open("swulogo.png", "rb") as image_file:
         logo_base64 = base64.b64encode(image_file.read()).decode()
+     # Display logos and header
+    with open("logo_img.png", "rb") as image_file:
+        logo_base64 = base64.b64encode(image_file.read()).decode()
     
     st.markdown(
     f"""
@@ -188,7 +191,8 @@ def classification_page():
         </h1>
     </div>
     """,
-    unsafe_allow_html=True)
+    unsafe_allow_html=True
+)
 
     st.markdown(
         """
