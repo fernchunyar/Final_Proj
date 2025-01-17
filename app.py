@@ -170,7 +170,9 @@ def guideline_page():
     )
 
     # Add an example image for visual aid
-    st.image("intro_img.png", caption="Example Output", use_column_width=True)
+    st.image("intro_img.png", caption="Example Output", use_container_width=True)
+ 
+
     
     st.markdown(
         """
