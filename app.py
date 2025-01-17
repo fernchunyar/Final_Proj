@@ -84,17 +84,30 @@ class CustomImageDataset(Dataset):
 
         return image, label
     
-def load_classification_model():
-    try:
-        classification_model = Vgg16()
-        if not os.path.exists("USonlyResnet50NoEarlyHaveTest.pth"):
-            raise FileNotFoundError("Model weights file 'USonlyResnet50NoEarlyHaveTest.pth' not found.")
-        classification_model.load_state_dict(torch.load("USonlyResnet50NoEarlyHaveTest.pth", map_location=device))
-        classification_model.eval()
-        return classification_model
-    except Exception as e:
-        st.error(f"Failed to load classification model: {e}")
-        return None
+# def load_classification_model():
+#     try:
+#         classification_model = Vgg16()
+#         if not os.path.exists("USonlyResnet50NoEarlyHaveTest.pth"):
+#             raise FileNotFoundError("Model weights file 'USonlyResnet50NoEarlyHaveTest.pth' not found.")
+#         classification_model.load_state_dict(torch.load("USonlyResnet50NoEarlyHaveTest.pth", map_location=device))
+#         classification_model.eval()
+#         return classification_model
+#     except Exception as e:
+#         st.error(f"Failed to load classification model: {e}")
+#         return None
+import requests
+
+    url = "https://github.com/username/repository-name/releases/download/v1.0/USonlyResnet50NoEarlyHaveTest.pth"
+    response = requests.get(url)
+
+# Save the file locally
+    with open('USonlyResnet50NoEarlyHaveTest.pth', 'wb') as f:
+        f.write(response.content)
+
+# Then, you can load the model with torch
+    import torch
+    classification_model = torch.load('model.pth')
+
 
 
 # def classify_image(image, model):
