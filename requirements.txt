@@ -1,5 +1,10 @@
-torch
-torchvision
-torchaudio
 streamlit
 streamlit-option-menu
+torch
+torchvision
+numpy
+pandas
+matplotlib
+Pillow
+scikit-learn
+timm
