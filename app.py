@@ -89,7 +89,8 @@ def load_classification_model():
         response = requests.get(url)
         with open('USonlyResnet50NoEarlyHaveTest.pth', 'wb') as f:
             f.write(response.content)
-        classification_model = torch.load('USonlyResnet50NoEarlyHaveTest.pth')
+        classification_model = torch.load('USonlyResnet50NoEarlyHaveTest.pth', map_location=device)
+
         return classification_model
     except Exception as e:
         st.error(f"Failed to load classification model: {e}")
