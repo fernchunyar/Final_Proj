@@ -1,6 +1,9 @@
+
+
 [theme]
-primaryColor = "#002d7a"  # Nearly navy blue for a bold and sophisticated primary color
-backgroundColor = "#F0F4F7"  # Very light grayish-blue for a clean and open feel
-secondaryBackgroundColor = "#E6EBF1"  # Soft gray for secondary elements
-textColor = "#333333"  # Dark gray for readable and gentle contrast
-font = "sans-serif"  # Clean and professional sans-serif font
+base = "light"  # Use "light" or "dark" for the base theme
+primaryColor = "#007bff"  # This is a common blue color (Bootstrap's primary blue)
+backgroundColor = "#f5f5f5"
+secondaryBackgroundColor = "#ffffff"
+textColor = "#000000"
+font = "sans serif"
