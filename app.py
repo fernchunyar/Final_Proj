@@ -258,36 +258,39 @@ def classification_page():
 
 # Sidebar menu logic with option menu
 # Sidebar menu logic with option menu
-# Sidebar menu logic with option menu
 with st.sidebar:
-    # Add custom CSS to change the Option Menu button colors to blue
+    # Add custom CSS to change the active and hover button colors to blue
     st.markdown(
         """
         <style>
-        /* Change the active button color to blue */
-        div[data-testid="stSidebar"] .nav-link.active {
-            background-color: #007bff !important;
-            color: white !important;
+        /* Change the active button background color and text color */
+        .nav-link.active {
+            background-color: #007bff !important;  /* Blue background */
+            color: white !important;  /* White text */
         }
-        /* Change the inactive button hover color to a lighter blue */
-        div[data-testid="stSidebar"] .nav-link {
-            color: black !important;
+        /* Change hover color for inactive buttons */
+        .nav-link:hover {
+            background-color: #0056b3 !important;  /* Darker blue for hover */
+            color: white !important;  /* White text on hover */
         }
-        div[data-testid="stSidebar"] .nav-link:hover {
-            background-color: #0056b3 !important;
-            color: white !important;
+        /* Inactive buttons */
+        .nav-link {
+            color: black !important;  /* Black text for inactive buttons */
         }
         </style>
         """,
         unsafe_allow_html=True,
     )
+
+    # Render the option menu
     selected = option_menu(
         menu_title="Main Menu",  # required
         options=["Guideline", "Classification"],  # required
-        icons=["book", "bar-chart"],  # bar-chart , search
-        menu_icon="house",  # optional
-        default_index=0,  # optional
+        icons=["book", "bar-chart"],  # optional icons
+        menu_icon="house",  # optional menu icon
+        default_index=0,  # default selection
     )
+
 
 
 
