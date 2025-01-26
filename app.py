@@ -257,30 +257,7 @@ def classification_page():
                     st.write(f"### Total Probability: {total_prob:.2f}%")
 
 # Sidebar menu logic with option menu
-# Sidebar menu logic with option menu
 with st.sidebar:
-    # Add custom CSS to change the active and hover button colors to blue
-    st.markdown(
-        """
-        <style>
-        /* Change the active button background color and text color */
-        .nav-link.active {
-            background-color: #007bff !important;  /* Blue background */
-            color: white !important;  /* White text */
-        }
-        /* Change hover color for inactive buttons */
-        .nav-link:hover {
-            background-color: #0056b3 !important;  /* Darker blue for hover */
-            color: white !important;  /* White text on hover */
-        }
-        /* Inactive buttons */
-        .nav-link {
-            color: black !important;  /* Black text for inactive buttons */
-        }
-        </style>
-        """,
-        unsafe_allow_html=True,
-    )
 
     # Render the option menu
     selected = option_menu(
