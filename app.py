@@ -257,7 +257,23 @@ def classification_page():
                     st.write(f"### Total Probability: {total_prob:.2f}%")
 
 # Sidebar menu logic with option menu
+# Sidebar menu logic with option menu
 with st.sidebar:
+    # Add custom CSS to change the button color to blue
+    st.markdown(
+        """
+        <style>
+        .css-1n76uvr {
+            background-color: #007bff !important;
+            color: white !important;
+        }
+        .css-1n76uvr:hover {
+            background-color: #0056b3 !important;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
     selected = option_menu(
         menu_title="Main Menu",  # required
         options=["Guideline", "Classification"],  # required
@@ -265,6 +281,7 @@ with st.sidebar:
         menu_icon="house",  # optional
         default_index=0,  # optional
     )
+
 
 # Display the page based on the sidebar selection
 if selected == "Guideline":
