@@ -153,7 +153,7 @@ def guideline_page():
     st.markdown(
         """
         This app classifies breast ultrasound images into three categories:
-        **Benign**, **Normal**, or **Malignant**. Follow these steps to use the app:
+        **Benign** or **Malignant**. Follow these steps to use the app:
         """
     )
     # Display steps
