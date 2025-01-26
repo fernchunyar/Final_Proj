@@ -258,17 +258,24 @@ def classification_page():
 
 # Sidebar menu logic with option menu
 # Sidebar menu logic with option menu
+# Sidebar menu logic with option menu
 with st.sidebar:
-    # Add custom CSS to change the button color to blue
+    # Add custom CSS to change the Option Menu button colors to blue
     st.markdown(
         """
         <style>
-        .css-1n76uvr {
+        /* Change the active button color to blue */
+        div[data-testid="stSidebar"] .nav-link.active {
             background-color: #007bff !important;
             color: white !important;
         }
-        .css-1n76uvr:hover {
+        /* Change the inactive button hover color to a lighter blue */
+        div[data-testid="stSidebar"] .nav-link {
+            color: black !important;
+        }
+        div[data-testid="stSidebar"] .nav-link:hover {
             background-color: #0056b3 !important;
+            color: white !important;
         }
         </style>
         """,
@@ -281,6 +288,7 @@ with st.sidebar:
         menu_icon="house",  # optional
         default_index=0,  # optional
     )
+
 
 
 # Display the page based on the sidebar selection
