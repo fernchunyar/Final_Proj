@@ -253,8 +253,8 @@ def classification_page():
                     st.write("### Predicted Probabilities:")
                     for label, prob in probabilities.items():
                         st.markdown(f"**{label}:** {prob:.2f}%")
-                    total_prob = sum(probabilities.values())
-                    st.write(f"### Total Probability: {total_prob:.2f}%")
+                    # total_prob = sum(probabilities.values())
+                    # st.write(f"### Total Probability: {total_prob:.2f}%")
 
 # Sidebar menu logic with option menu
 with st.sidebar:
