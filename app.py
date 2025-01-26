@@ -222,19 +222,7 @@ def guideline_page():
 
         st.success("ตอนนี้คุณพร้อมที่จะไปที่หน้า **Classification** แล้ว!")
 
-        # Add an example image for visual aid
-        st.image("intro_img.png", caption="ตัวอย่างผลลัพธ์", use_container_width=True)
-
-        st.markdown(
-            """
-            ### หมายเหตุ:
-            - ตรวจสอบให้แน่ใจว่าภาพเป็นภาพอัลตราซาวด์เต้านมที่ถูกต้องในรูปแบบ `.jpg`, `.jpeg`, หรือ `.png`
-            - แอปใช้โมเดลที่ผ่านการฝึกฝนแล้ว อาจใช้เวลาสักครู่ในการประมวลผลภาพของคุณ
-            - สำหรับผลลัพธ์ที่ดีที่สุด ควรอัปโหลดภาพที่ชัดเจนและมีคุณภาพสูง
-            """
-        )
-
-        st.success("ตอนนี้คุณพร้อมที่จะไปที่หน้า **Classification** แล้ว!")
+        
 # Create a classification page
 def classification_page():
     # Display logos and header
