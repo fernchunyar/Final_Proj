@@ -148,11 +148,12 @@ def classify_image(image, model):
         return None, None
 
 # Create a guideline page
+# Create a guideline page
 def guideline_page():
     st.title("Guidelines for Using the Breast Cancer Classification App")
 
-    # Create a more modern language selection dropdown
-    lang_button = st.selectbox("Select Language", ("English", "Thai"))
+    # Create a more modern language selection dropdown with Thai as the default
+    lang_button = st.selectbox("เลือกภาษา", ("Thai", "English"))  # Start with Thai
 
     if lang_button == "English":
         st.markdown(
@@ -221,6 +222,7 @@ def guideline_page():
         )
 
         st.success("ตอนนี้คุณพร้อมที่จะไปที่หน้า **Classification** แล้ว!")
+
 
         
 # Create a classification page
