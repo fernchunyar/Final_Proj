@@ -313,4 +313,4 @@ with st.sidebar:
 if selected == "Guideline":
     guideline_page()
 elif selected == "Classification":
-    classification_page() switch Thai and eng start with thai 
+    classification_page() 
