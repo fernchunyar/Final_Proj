@@ -182,8 +182,8 @@ def guideline_page():
             """
             ### Notes:
             - Ensure that the image is a valid breast ultrasound scan in `.jpg`, `.jpeg`, or `.png` format.
-            - The app uses a pre-trained model and may take a few seconds to process your image.
-            - For best results, upload clear and high-quality images.
+            - The app may take a few seconds to process your image.
+            - For best results, please upload clear and high-quality images.
             """
         )
 
