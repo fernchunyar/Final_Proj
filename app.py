@@ -153,7 +153,7 @@ def guideline_page():
     st.title("Guidelines for Using the Breast Cancer Classification App")
 
     # Create a more modern language selection dropdown with Thai as the default
-    lang_button = st.selectbox("Languages", ("Thai", "English"))  # Start with Thai
+    lang_button = st.selectbox("Languages:", ("Thai", "English"))  # Start with Thai
 
     if lang_button == "English":
         st.markdown(
