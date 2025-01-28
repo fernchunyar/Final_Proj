@@ -6,7 +6,6 @@ from torchvision import models, transforms
 import base64
 from streamlit_option_menu import option_menu
 import torch
-import torch.nn as nn
 import numpy as np
 import pandas as pd
 import torchvision
