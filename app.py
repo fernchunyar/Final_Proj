@@ -48,7 +48,7 @@ minority_classes = ['malignant']
 #     Resnet101.fc = nn.Linear(in_features, len(class_names))
 #     return Resnet101  # Ensure the model is returned
 
-def Vgg16():
+def Resnet50():
     model = timm.create_model('resnet50', pretrained=True)
 
     # Adjust Fully Connected Layer (FC Layer)
@@ -85,7 +85,7 @@ import requests
 def load_classification_model():
     try:
         # Create the model architecture first (e.g., using ResNet50 or VGG16)
-        classification_model = Vgg16()  # Make sure Vgg16 or ResNet50 is correctly defined in your code
+        classification_model = Resnet50()  # Make sure Vgg16 or ResNet50 is correctly defined in your code
 
         # Download model weights from the URL
         url = "https://github.com/fernchunyar/Final_Proj/releases/download/v1.0/USonlyResnet50NoEarlyHaveTest.pth"
