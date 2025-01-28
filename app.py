@@ -31,22 +31,10 @@ from torchvision.transforms import RandomHorizontalFlip, RandomRotation, ColorJi
 # Set the page layout to wide mode
 st.set_page_config(layout="wide", page_title="Breast Cancer Classifier")
 
-# Define the VGG classifier
+# Define the Resnet50 classifier
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 class_names = ['benign','malignant']
 minority_classes = ['malignant']
-
-# Transfer Learning by fineTuning the pretrained Resnet101 Model
-# Load Resnet101 pretrained Model
-# If pretrained is not working, you can also use weights instead.
-# def ResNet101():
-#     Resnet101 = models.resnet101(pretrained=True)
-#     Resnet101 = models.resnet101(weights=models.ResNet101_Weights.DEFAULT)  # Update for torchvision >= 0.13
-#     for param in Resnet101.parameters():
-#         param.requires_grad = True
-#     in_features = Resnet101.fc.in_features
-#     Resnet101.fc = nn.Linear(in_features, len(class_names))
-#     return Resnet101  # Ensure the model is returned
 
 def Resnet50():
     model = timm.create_model('resnet50', pretrained=True)
@@ -147,7 +135,6 @@ def classify_image(image, model):
         st.error(f"An error occurred while processing the image: {e}")
         return None, None
 
-# Create a guideline page
 # Create a guideline page
 def guideline_page():
     st.title("Guidelines for Using the Breast Cancer Classification App")
