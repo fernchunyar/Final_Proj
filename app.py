@@ -28,7 +28,7 @@ import matplotlib.pyplot as plt
 from torchvision.transforms import RandomHorizontalFlip, RandomRotation, ColorJitter
 
 # Set the page layout to wide mode
-st.set_page_config(layout="wide", page_title="hiddensmart_eiei")
+st.set_page_config(layout="wide", page_title="hiddensmart")
 
 # Define the Resnet50 classifier
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
