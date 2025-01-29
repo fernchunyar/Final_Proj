@@ -295,35 +295,6 @@ with st.sidebar:
     )
 
 
-# Custom CSS to replace Streamlit logo with your own
-custom_logo = "swulogo.png"  # Replace with your logo file
-
-st.markdown(
-    f"""
-    <style>
-        /* Hide Streamlit's default menu and logo */
-        header .decoration {
-            display: none;
-        }
-        
-        /* Replace Streamlit logo with a custom logo */
-        [data-testid="stSidebarNav"]::before {{
-            content: "";
-            display: block;
-            margin: 0 auto;
-            width: 150px;
-            height: 150px;
-            background-image: url("data:image/png;base64,{base64.b64encode(open(custom_logo, "rb").read()).decode()}");
-            background-size: contain;
-            background-repeat: no-repeat;
-        }}
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
-
-
-
 # Display the page based on the sidebar selection
 if selected == "Guideline":
     guideline_page()
