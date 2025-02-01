@@ -113,22 +113,14 @@ def classify_image(image, model):
         # Perform inference
         with torch.no_grad():
             output = model(image_tensor)
-            probs = torch.softmax(output, dim=1).cpu().numpy().squeeze()  # Convert to probabilities
-
-        # Normalize probabilities to ensure they sum to 100%
-        probs_percent = probs * 100
-        probs_percent = np.round(probs_percent / probs_percent.sum() * 100, 2)
-
-        # Adjust for rounding differences to ensure exact 100%
-        diff = 100.00 - np.sum(probs_percent)
-        probs_percent[np.argmax(probs_percent)] += diff
+            probs = torch.softmax(output, dim=1).cpu().numpy().squeeze() * 100  # Convert to percentages
 
         # Map predictions to labels
         labels = {0: "Benign", 1: "Malignant"}
-        probabilities = {labels[i]: probs_percent[i] for i in range(len(labels))}
-        _, predicted_class = torch.max(output, 1)
+        probabilities = {labels[i]: round(probs[i], 2) for i in range(len(labels))}
+        predicted_class = np.argmax(probs)  # Get the class with highest probability
 
-        return labels[predicted_class.item()], probabilities
+        return labels[predicted_class], probabilities
 
     except Exception as e:
         st.error(f"An error occurred while processing the image: {e}")
