@@ -85,7 +85,7 @@ def load_classification_model():
             f.write(response.content)
 
         # Load the saved weights into the model
-        classification_model.load_state_dict(torch.load('10Mar_RUN2_Fuzzy_R4_50epoch_efficientnet_b1_11Jan(2.pth', map_location=device))
+        classification_model.load_state_dict(torch.load('10Mar_RUN2_Fuzzy_R4_50epoch_efficientnet_b1_11Jan(2.pth', map_location=device, weights_only=False))
 
         # Set the model to evaluation mode
         classification_model.eval()
@@ -121,11 +121,8 @@ def classify_image(image, model, device):
         transform = transforms.Compose([
             transforms.Resize((256, 256)),
             transforms.CenterCrop((224, 224)),
-            # Apply custom augmentations to minority classes
-            transforms.RandomApply([minority_class_transforms], p=0.5) 
-            if any(cls in minority_classes for cls in class_names) else transforms.RandomApply([], p=0.0),
             transforms.ToTensor(),
-            transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])  # Normalize for pretrained models
+            transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
         ])
 
         # Apply transformations to the image
