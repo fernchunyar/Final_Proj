@@ -96,15 +96,34 @@ def load_classification_model():
         st.error(f"Failed to load classification model: {e}")
         return None
 
-def classify_image(image, model):
+import torch
+import numpy as np
+import torchvision.transforms as transforms
+from torchvision.transforms import RandomHorizontalFlip, RandomRotation
+
+def classify_image(image, model, device):
     try:
         # Ensure the image has three channels (RGB)
         if image.mode != "RGB":
             image = image.convert("RGB")
 
+        # Define class names and minority classes
+        class_names = ['benign', 'malignant']
+        minority_classes = ['malignant']
+
+        # Define custom data transformations for minority classes
+        minority_class_transforms = transforms.Compose([
+            RandomHorizontalFlip(p=0.9),  # Apply with 90% probability
+            RandomRotation(15, expand=False, center=None),
+        ])
+
         # Define transformations for the image
         transform = transforms.Compose([
-            transforms.Resize((224, 224)),  # Resize to 224x224 as required by the model
+            transforms.Resize((256, 256)),
+            transforms.CenterCrop((224, 224)),
+            # Apply custom augmentations to minority classes
+            transforms.RandomApply([minority_class_transforms], p=0.5) 
+            if any(cls in minority_classes for cls in class_names) else transforms.RandomApply([], p=0.0),
             transforms.ToTensor(),
             transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])  # Normalize for pretrained models
         ])
@@ -120,12 +139,12 @@ def classify_image(image, model):
         # Map predictions to labels
         labels = {0: "Benign", 1: "Malignant"}
         probabilities = {labels[i]: round(probs[i], 2) for i in range(len(labels))}
-        predicted_class = np.argmax(probs)  # Get the class with highest probability
+        predicted_class = np.argmax(probs)  # Get the class with the highest probability
 
         return labels[predicted_class], probabilities
 
     except Exception as e:
-        st.error(f"An error occurred while processing the image: {e}")
+        print(f"An error occurred while processing the image: {e}")
         return None, None
 
 # Create a guideline page
