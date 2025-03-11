@@ -245,22 +245,25 @@ def guideline_page():
 # Create a classification page
 def classification_page():
     # Display logos and header
-    with open("swulogo.png", "rb") as image_file:
+   with open("swulogo.png", "rb") as image_file:
         logo_base64 = base64.b64encode(image_file.read()).decode()
-
+     # Display logos and header
+    with open("logo_img.png", "rb") as image_file:
+        logo_base64 = base64.b64encode(image_file.read()).decode()
+    
     st.markdown(
-        f"""
-        <div style="text-align: center;">
-            <img src="data:image/png;base64,{logo_base64}" width="350" style="margin-bottom: 10px;">
-        </div>
-        <div style="text-align: center;">
-            <h1 style="font-size: 48px; font-weight: bold;">
-                Breast Cancer Ultrasound Classification
-            </h1>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
+    f"""
+    <div style="text-align: center;">
+        <img src="data:image/png;base64,{logo_base64}" width="350" style="margin-bottom: 10px;">
+    </div>
+    <div style="text-align: center;">
+        <h1 style="font-size: 48px; font-weight: bold;">
+            Breast Cancer Ultrasound Classification
+        </h1>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 
     st.markdown(
         """
