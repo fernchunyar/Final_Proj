@@ -36,13 +36,15 @@ class_names = ['benign','malignant']
 minority_classes = ['malignant']
 
 def Resnet50():
-    model = timm.create_model('resnet50', pretrained=True)
+    model = timm.create_model('efficientnet_b1', pretrained=True)
 
-    # Adjust Fully Connected Layer (FC Layer)
-    num_ftrs = model.fc.in_features  # Number of input features of FC layer
-    model.fc = torch.nn.Linear(num_ftrs, 2)  # Change to the number of classes you want (2 classes)
+# ตรวจสอบจำนวน input features ของ Fully Connected Layer
+    num_ftrs = model.classifier.in_features
 
-    # Move the model to device
+# แทนที่ Fully Connected Layer เพื่อให้รองรับ 2 คลาส
+    model.classifier = torch.nn.Linear(num_ftrs, 2)
+
+
     model = model.to(device)
     return model
 
@@ -75,15 +77,15 @@ def load_classification_model():
         classification_model = Resnet50()  # Make sure Vgg16 or ResNet50 is correctly defined in your code
 
         # Download model weights from the URL
-        url = "https://github.com/fernchunyar/Final_Proj/releases/download/v1.0/USonlyResnet50NoEarlyHaveTest.pth"
+        url = "https://github.com/fernchunyar/Final_Proj/releases/download/v1.0/10Mar_RUN2_Fuzzy_R4_50epoch_efficientnet_b1_11Jan(2.pth"
         response = requests.get(url)
         
         # Save the model weights to the local file
-        with open('USonlyResnet50NoEarlyHaveTest.pth', 'wb') as f:
+        with open('10Mar_RUN2_Fuzzy_R4_50epoch_efficientnet_b1_11Jan(2.pth', 'wb') as f:
             f.write(response.content)
 
         # Load the saved weights into the model
-        classification_model.load_state_dict(torch.load('USonlyResnet50NoEarlyHaveTest.pth', map_location=device))
+        classification_model.load_state_dict(torch.load('10Mar_RUN2_Fuzzy_R4_50epoch_efficientnet_b1_11Jan(2.pth', map_location=device))
 
         # Set the model to evaluation mode
         classification_model.eval()
