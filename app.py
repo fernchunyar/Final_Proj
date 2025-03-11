@@ -96,10 +96,41 @@ def load_classification_model():
         st.error(f"Failed to load classification model: {e}")
         return None
 
+from torchvision import transforms
 import torch
 import numpy as np
-import torchvision.transforms as transforms
-from torchvision.transforms import RandomHorizontalFlip, RandomRotation
+from PIL import Image
+
+# Define the minority classes in your dataset
+class_names = ['benign', 'malignant']
+minority_classes = ['malignant']
+
+# Define custom data transformations for minority classes
+minority_class_transforms = transforms.Compose([
+    transforms.RandomHorizontalFlip(p=0.9),  # Apply with 90% probability
+    transforms.RandomRotation(15, expand=False, center=None),
+    # Uncomment if you want to add color jittering
+    # transforms.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2, hue=0.1),
+])
+
+# Define data transformations for train, validation, and test sets
+data_transforms = {
+    'train': transforms.Compose([
+        transforms.Resize((256, 256)),
+        transforms.CenterCrop((224, 224)),
+        # Apply custom augmentations to minority classes
+        transforms.RandomApply([minority_class_transforms], p=0.5) if any(cls in minority_classes for cls in class_names) else transforms.RandomApply([], p=0.0),
+        transforms.ToTensor(),
+        transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+    ]),
+
+    'test': transforms.Compose([
+        transforms.Resize((256, 256)),
+        transforms.CenterCrop((224, 224)),
+        transforms.ToTensor(),
+        transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+    ])
+}
 
 def classify_image(image, model, device):
     try:
@@ -107,17 +138,7 @@ def classify_image(image, model, device):
         if image.mode != "RGB":
             image = image.convert("RGB")
 
-        # Define class names and minority classes
-        class_names = ['benign', 'malignant']
-        minority_classes = ['malignant']
-
-        # Define custom data transformations for minority classes
-        minority_class_transforms = transforms.Compose([
-            RandomHorizontalFlip(p=0.9),  # Apply with 90% probability
-            RandomRotation(15, expand=False, center=None),
-        ])
-
-        # Define transformations for the image
+        # Apply the standard transformations (resize, crop, normalize)
         transform = transforms.Compose([
             transforms.Resize((256, 256)),
             transforms.CenterCrop((224, 224)),
@@ -125,7 +146,7 @@ def classify_image(image, model, device):
             transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
         ])
 
-        # Apply transformations to the image
+        # Transform the image and prepare it for model input
         image_tensor = transform(image).unsqueeze(0).to(device)  # Add batch dimension and move to device
 
         # Perform inference
