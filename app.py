@@ -247,23 +247,20 @@ def classification_page():
     # Display logos and header
     with open("swulogo.png", "rb") as image_file:
         logo_base64 = base64.b64encode(image_file.read()).decode()
-     # Display logos and header
-    with open("logo_img.png", "rb") as image_file:
-        logo_base64 = base64.b64encode(image_file.read()).decode()
-    
+
     st.markdown(
-    f"""
-    <div style="text-align: center;">
-        <img src="data:image/png;base64,{logo_base64}" width="350" style="margin-bottom: 10px;">
-    </div>
-    <div style="text-align: center;">
-        <h1 style="font-size: 48px; font-weight: bold;">
-            Breast Cancer Ultrasound Classification
-        </h1>
-    </div>
-    """,
-    unsafe_allow_html=True
-)
+        f"""
+        <div style="text-align: center;">
+            <img src="data:image/png;base64,{logo_base64}" width="350" style="margin-bottom: 10px;">
+        </div>
+        <div style="text-align: center;">
+            <h1 style="font-size: 48px; font-weight: bold;">
+                Breast Cancer Ultrasound Classification
+            </h1>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
     st.markdown(
         """
@@ -274,44 +271,47 @@ def classification_page():
         unsafe_allow_html=True,
     )
 
-    uploaded_file = st.file_uploader(" ", type=["jpg", "jpeg", "png"])
+    uploaded_file = st.file_uploader("Upload Image", type=["jpg", "jpeg", "png"])
 
     if uploaded_file:
-        # Display the uploaded image in the left column
+        # Open the uploaded image
         image = Image.open(uploaded_file)
+        
+        # Load the model and device
         classification_model = load_classification_model()
+        device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
         if classification_model:
             with st.spinner("Processing..."):
-                result, probabilities = classify_image(image, classification_model)
+                # Pass the device to the classify_image function
+                result, probabilities = classify_image(image, classification_model, device)
 
-                # Two-column layout
-                col1, col2 = st.columns(2)
+                if result:
+                    # Two-column layout to display the image and classification result
+                    col1, col2 = st.columns(2)
 
-                with col1:
-                    st.image(image, caption="Uploaded Image", use_container_width=True)
+                    with col1:
+                        st.image(image, caption="Uploaded Image", use_container_width=True)
 
-                with col2:
-                    if result == "Benign":
-                        color = "green"
-                    else:
-                        color = "red"
-                    st.markdown(
-                         f"""
-                        <h1 style="font-size: 30px;">
-                            Classification Result:<strong style="font-size: 30px; margin-bottom: 10px; color:{color};">
-                            {result}
-                        </strong> 
-                        </h1>
+                    with col2:
+                        # Set color based on classification result
+                        if result == "Benign":
+                            color = "green"
+                        else:
+                            color = "red"
                         
-                        """,
-                        unsafe_allow_html=True,
-                    )
-                    st.write("### Predicted Probabilities:")
-                    for label, prob in probabilities.items():
-                        st.markdown(f"**{label}:** {prob:.2f}%")
-                    # total_prob = sum(probabilities.values())
-                    # st.write(f"### Total Probability: {total_prob:.2f}%")
+                        st.markdown(
+                            f"""
+                            <h1 style="font-size: 30px; color:{color};">
+                                Classification Result: {result}
+                            </h1>
+                            """,
+                            unsafe_allow_html=True,
+                        )
+                        st.write("### Predicted Probabilities:")
+                        for label, prob in probabilities.items():
+                            st.markdown(f"**{label}:** {prob:.2f}%")
+
 
 # Sidebar menu logic with option menu
 with st.sidebar:
