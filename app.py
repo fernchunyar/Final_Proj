@@ -245,12 +245,11 @@ def guideline_page():
 # Create a classification page
 def classification_page():
     # Display logos and header
-   with open("swulogo.png", "rb") as image_file:
+    with open("swulogo.png", "rb") as image_file:
         logo_base64 = base64.b64encode(image_file.read()).decode()
      # Display logos and header
     with open("logo_img.png", "rb") as image_file:
         logo_base64 = base64.b64encode(image_file.read()).decode()
-    
     st.markdown(
     f"""
     <div style="text-align: center;">
