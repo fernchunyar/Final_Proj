@@ -36,7 +36,7 @@ class_names = ['benign','malignant']
 minority_classes = ['malignant']
 
 def Resnet50():
-    model = timm.create_model('efficientnet_b1', pretrained=True)
+    model = timm.create_model('efficientnet_b4', pretrained=True)
 
 # ตรวจสอบจำนวน input features ของ Fully Connected Layer
     num_ftrs = model.classifier.in_features
