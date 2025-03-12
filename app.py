@@ -77,15 +77,15 @@ def load_classification_model():
         classification_model = Resnet50()  # Make sure Vgg16 or ResNet50 is correctly defined in your code
 
         # Download model weights from the URL
-        url = "https://github.com/fernchunyar/Final_Proj/releases/download/v2.0/10Mar_RUN2_Fuzzy_R4_50epoch_efficientnet_b1_11Jan.2.pth"
+        url = "https://github.com/fernchunyar/Final_Proj/releases/download/v.03/12MarFern+Weight15Fuzzy30epoch_efficientnet_b4.pth"
         response = requests.get(url)
         
         # Save the model weights to the local file
-        with open('10Mar_RUN2_Fuzzy_R4_50epoch_efficientnet_b1_11Jan(2.pth', 'wb') as f:
+        with open('12MarFern+Weight15Fuzzy30epoch_efficientnet_b4.pth', 'wb') as f:
             f.write(response.content)
 
         # Load the saved weights into the model
-        classification_model.load_state_dict(torch.load('10Mar_RUN2_Fuzzy_R4_50epoch_efficientnet_b1_11Jan(2.pth', map_location=device, weights_only=False))
+        classification_model.load_state_dict(torch.load('12MarFern+Weight15Fuzzy30epoch_efficientnet_b4.pth', map_location=device, weights_only=False))
 
         # Set the model to evaluation mode
         classification_model.eval()
